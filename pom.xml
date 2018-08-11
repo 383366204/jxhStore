@@ -1,0 +1,173 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.newland.jxh</groupId>
+  <artifactId>store</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0.0</version>
+
+  <name>jxhStore</name>
+  <description>Spring Boot project for jxhStore</description>
+
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.4.RELEASE</version>
+  </parent>
+
+  <repositories>
+    <!--阿里云仓库-->
+    <repository>
+      <id>aliyun</id>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+    </repository>
+  </repositories>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+    <mybatis-plus-boot-starter.version>2.3</mybatis-plus-boot-starter.version>
+    <HikariCP.version>3.2.0</HikariCP.version>
+    <velocity.version>2.0</velocity.version>
+    <guava.version>25.1-jre</guava.version>
+    <commons-lang3>3.7</commons-lang3>
+    <commons-beanutils.version>1.9.3</commons-beanutils.version>
+    <lombok.version>1.18.2</lombok.version>
+    <hibernate-validator.version>5.4.2.Final</hibernate-validator.version>
+    <junit.version>4.12</junit.version>
+  </properties>
+  <dependencies>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>spring-boot-starter-logging</artifactId>
+          <groupId>org.springframework.boot</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- 去除boot默认logging实现,引入log4j2依赖 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-log4j2</artifactId>
+    </dependency>
+
+    <!-- boot开发热加载插件 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <!--velocity: mp代码生成器使用-->
+      <dependency>
+          <groupId>org.apache.velocity</groupId>
+          <artifactId>velocity-engine-core</artifactId>
+          <version>${velocity.version}</version>
+         <!-- <scope>provided</scope>-->
+      </dependency>
+
+    <!--google guava -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+
+    <!--mybatis-plus简称mp,引入此依赖会自动管理mybatis以及mybatis与spring集成相关依赖 -->
+    <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus-boot-starter</artifactId>
+      <version>${mybatis-plus-boot-starter.version}</version>
+    </dependency>
+
+    <!--mysql 驱动 -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!--HikariCP 数据库连接池,性能超群,boot2.0 默认支持 -->
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>${HikariCP.version}</version>
+    </dependency>
+
+    <!--增强语言包 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang3.version}</version>
+    </dependency>
+
+    <!--javabean操作 与 反射工具 -->
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>${commons-beanutils.version}</version>
+    </dependency>
+
+
+    <!--lombok插件 -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <!--JSR303数据校验支持-->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${hibernate-validator.version}</version>
+    </dependency>
+
+    <!-- junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
+
+
+
+  </dependencyManagement>
+  <build>
+    <plugins>
+      <!--  maven的核心插件之-complier插件默认只支持编译Java 1.4，因此需要加上支持高版本jre的配置，在pom.xml里面加上 增加编译插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <fork>true</fork>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
+
