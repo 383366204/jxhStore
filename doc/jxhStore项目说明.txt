@@ -1,0 +1,17 @@
+#后端部分
+
+技术选型:
+
+核心框架：SpringBoot
+ORM 框架：MyBatis
+MyBatis 工具：MyBatis Plus
+MVC 框架：Spring MVC
+编译辅助插件：Lombok
+数据库：MySQL
+数据库连接池 :HikariCP
+
+项目结构:
+backend store后台
+portal  store前台
+demo    演示使用功能
+......
