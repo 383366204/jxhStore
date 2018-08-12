@@ -132,6 +132,21 @@
       <version>${commons-beanutils.version}</version>
     </dependency>
 
+    <!-- ftp -->
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>3.6</version>
+    </dependency>
+
+    <!-- Java的缩略图生成库 -->
+    <dependency>
+      <groupId>net.coobird</groupId>
+      <artifactId>thumbnailator</artifactId>
+      <version>0.4.8</version>
+    </dependency>
+
+
 
     <!--lombok插件 -->
     <dependency>
