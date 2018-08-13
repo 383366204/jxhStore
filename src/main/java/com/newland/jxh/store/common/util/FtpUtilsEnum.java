@@ -1,13 +1,19 @@
 package com.newland.jxh.store.common.util;
 
 
-import java.io.*;
-import java.net.SocketException;
-
+import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-import net.coobird.thumbnailator.Thumbnails;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.SocketException;
+import java.util.Arrays;
+import java.util.Properties;
 
 /**
 * @Author qyw
@@ -15,43 +21,70 @@ import net.coobird.thumbnailator.Thumbnails;
 * @Date Created in 22:29 2018/8/12
 * @Param 
 * @Return 
-**/        
+**/
+@Slf4j
 public enum FtpUtilsEnum {
     INSTANCE;
     private static FtpUtilsEnum instance = null;
     private static FTPClient ftpClient = null;
     private String cache_dir = "e:/cache/";//用于压缩图片
-    private String server = "192.168.1.13";
-    private int port = 21;
-    private String userName = "ZW-13";
-    private String userPassword = "123";
-    public static final String CONTROL_ENCODING="UTF-8";
+    private static String server;
+    private static int port;
+    private static String userName;
+    private static String userPassword ;
+    private static String CONTROL_ENCODING;
+
+       static {
+           initConfig();
+       }
+
+    public static void initConfig(){
+        try {
+            Properties properties = PropertiesLoaderUtils.loadAllProperties("jxhStore.properties");
+            server=properties.getProperty("ftp.server").trim();
+            try {
+                port=Integer.valueOf(properties.getProperty("ftp.port").trim());
+            } catch (NumberFormatException e) {
+                log.error("端口配置请使用阿拉伯数字!",e);
+                e.printStackTrace();
+            }
+            userName=properties.getProperty("ftp.username").trim();
+            userPassword=properties.getProperty("ftp.password").trim();
+            CONTROL_ENCODING=properties.getProperty("ftp.controlEncoding","UTF-8").trim();
+        } catch (IOException e) {
+            log.error("读取ftp配置文件异常",e);
+            e.printStackTrace();
+        }
+
+    }
 
     public static FtpUtilsEnum getInstance(){
         if(instance == null){
             instance = INSTANCE;
         }
-
         ftpClient = new FTPClient();
         return instance;
     }
 
+
     /**
      * 连接FTP服务器
-     * @return
      */
     private boolean connect(){
         boolean status = false;
         try {
-            if(ftpClient.isConnected())
+            if(ftpClient.isConnected()){
                 return true;
+            }
             ftpClient.connect(server, port);
             status = true;
         } catch (SocketException e) {
             status = false;
+            log.error("ftp连接异常",e);
             e.printStackTrace();
         } catch (IOException e) {
             status = false;
+            log.error("ftp连接异常",e);
             e.printStackTrace();
         }
         return status;
@@ -60,13 +93,11 @@ public enum FtpUtilsEnum {
 
     /**
      * 打开FTP服务器
-     * @return
      */
     public boolean open(){
         if(!connect()){
             return false;
         }
-
         boolean status = false;
         try {
             status = ftpClient.login(userName, userPassword);
@@ -75,8 +106,10 @@ public enum FtpUtilsEnum {
             if (!FTPReply.isPositiveCompletion(reply)) {
                 close();
                 status = false;
+                log.error("ftp应答异常,响应码:{}",reply);
             }
         } catch (IOException e) {
+            log.error("ftp登录异常",e);
             e.printStackTrace();
             status = false;
         }
@@ -97,6 +130,7 @@ public enum FtpUtilsEnum {
                 ftpClient = null;
             }
         } catch (IOException e) {
+            log.error("ftp登出或断开连接异常",e);
             e.printStackTrace();
         }
     }
@@ -104,43 +138,57 @@ public enum FtpUtilsEnum {
 
     /**
      * 上传文件到FTP服务器
-     * @param filename
-     * @param path
-     * @param input
+     * @param filename 上传文件存储名称
+     * @param path 上传文件存储路径,从根路径 "/" 开始
+     * @param inputStream 上传文件输入流
      * @return
      */
-    public boolean upload(String filename,String path,InputStream input){
+    public boolean upload(String filename,String path,InputStream inputStream){
         boolean status = false;
-
         try {
-            cd(path);
-            ftpClient.setBufferSize(1024);
-            ftpClient.setControlEncoding(CONTROL_ENCODING);
-            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            status = ftpClient.storeFile(filename, input);
-            input.close();  //关闭输入流
+            if(cd(path)){
+                ftpClient.setBufferSize(1024);
+                ftpClient.setControlEncoding(CONTROL_ENCODING);
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                status = ftpClient.storeFile(filename, inputStream);
+            }else{
+                log.error("切换工作目录失败,目录:{}",path);
+            }
         } catch (IOException e) {
-
+            log.error("ftp上传文件异常",e);
+        }finally {
+            close();
+            if(null != inputStream){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return status;
     }
 
     /**
      * 上传文件到FTP服务器
-     * @param filename
-     * @param path
+     * @param filename 上传文件存储名称
+     * @param path  上传文件存储路径,从根路径 "/" 开始
+     * @param filepath  需要上传的文件路径
      * @return
      */
     public boolean upload(String filename,String path,String filepath){
         boolean status = false;
-        FileInputStream inputStream=null;
+        InputStream inputStream=null;
         try {
-            cd(path);
-            ftpClient.setBufferSize(1024);
-            ftpClient.setControlEncoding(CONTROL_ENCODING);
-            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            inputStream =new FileInputStream(new File(filepath));
-            status = ftpClient.storeFile(filename, inputStream);
+            if(cd(path)){
+                ftpClient.setBufferSize(1024);
+                ftpClient.setControlEncoding(CONTROL_ENCODING);
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                inputStream =new FileInputStream(new File(filepath));
+                status = ftpClient.storeFile(filename, inputStream);
+            }else{
+                log.error("切换工作目录失败,目录:{}",path);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -158,22 +206,24 @@ public enum FtpUtilsEnum {
 
     /**
      * 上传文件
-     * @param filename
-     * @param path
-     * @param file
+     * @param filename 上传文件存储名称
+     * @param path 上传文件存储路径,从根路径 "/" 开始
+     * @param file 上传文件
      * @return
      */
     public boolean upload(String filename,String path,File file){
         boolean status = false;
-        FileInputStream inputStream=null;
+        InputStream inputStream=null;
         try {
-            cd(path);
-            ftpClient.setBufferSize(1024);
-            ftpClient.setControlEncoding(CONTROL_ENCODING);
-            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            inputStream = new FileInputStream(file);
-            status = ftpClient.storeFile(filename,inputStream);
-            inputStream.close();  //关闭输入流
+            if(cd(path)){
+                ftpClient.setBufferSize(1024);
+                ftpClient.setControlEncoding(CONTROL_ENCODING);
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                inputStream = new FileInputStream(file);
+                status = ftpClient.storeFile(filename,inputStream);
+            }else{
+                log.error("切换工作目录失败,目录:{}",path);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -246,16 +296,19 @@ public enum FtpUtilsEnum {
         boolean status = true;
         try {
             String[] dirs = dir.split("/");
+            if(log.isInfoEnabled()){
+                log.info("切换路径:{}",dirs);
+            }
+            System.out.println(Arrays.toString(dirs));
             if(dirs.length == 0){
                 return ftpClient.changeWorkingDirectory(dir);
             }
-
             status = ftpClient.changeToParentDirectory();
             for(String dirItem : dirs){
                 status = status && ftpClient.changeWorkingDirectory(dirItem);
             }
-            status = true;
         } catch (IOException e) {
+            log.error("切换路径异常,路径:{},异常:{}",dir,e);
             e.printStackTrace();
             status = false;
         }

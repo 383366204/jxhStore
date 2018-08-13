@@ -3,7 +3,7 @@
 使用方式如下1：
 private static final Logger logger = LogManager.getLogger(实际类名.class.getName());
 使用方式如下2(推荐)：
-lombok @log 注解
+lombok @Slf4j 注解
 
 2、日志说明：
 （1）请根据实际情况配置各项参数
@@ -41,7 +41,7 @@ lombok @log 注解
     <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
     <loggers>
         <!--建立一个默认的root的logger-->
-        <Logger name="com.newland.jxh" level="trace"
+        <Logger name="com.newland.jxh.store" level="trace"
                 additivity="true">
             <AppenderRef ref="RollingFile" />
         </Logger>
