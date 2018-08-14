@@ -41,7 +41,7 @@ public class FtpUtilTest {
     @Test
     public void testUpload() throws Exception {
         if(instance.open()){
-            boolean upload = instance.upload("testFtp.html", "", inputStream);
+            boolean upload = instance.uploadFile("testFtp.html", "", inputStream);
             System.out.println(upload==true?"上传成功":"上传失败");
         }
     }
@@ -57,9 +57,9 @@ public class FtpUtilTest {
     }
     @Test
     public void testDownload() throws Exception {
-        Path path = Paths.get("D:\\jxhStore\\src\\main\\resources");
+        Path path = Paths.get("D:\\jxhStore\\src\\main\\resources\\dowland");
         if(instance.open()){
-            boolean upload = instance.downloadFile("root/dmweb/rwdwebapp3.0", "download_file.jsp", path.toString());
+            boolean upload = instance.downloadFile("", "girl.jpg", path.toString());
             System.out.println(upload==true?"下载文件成功":"下载文件失败");
         }
     }

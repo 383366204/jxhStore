@@ -91,10 +91,12 @@ public enum FtpUtilsEnum {
             status = false;
             log.error("ftp连接异常",e);
             e.printStackTrace();
+            return status;
         } catch (IOException e) {
             status = false;
             log.error("ftp连接异常",e);
             e.printStackTrace();
+            return status;
         }
         return status;
     }
@@ -116,11 +118,15 @@ public enum FtpUtilsEnum {
                 close();
                 status = false;
                 log.error("ftp应答异常,响应码:{}",reply);
+                return status;
+            }else{
+                ftpClient.enterLocalPassiveMode();// 被动模式
             }
         } catch (IOException e) {
             log.error("ftp登录异常",e);
             e.printStackTrace();
             status = false;
+            return status;
         }
         return status;
     }
@@ -152,7 +158,7 @@ public enum FtpUtilsEnum {
      * @param inputStream 上传文件输入流
      * @return
      */
-    public boolean upload(String filename,String path,InputStream inputStream){
+    public boolean uploadFile(String filename,String path,InputStream inputStream){
         checkNotNull(filename,"上传文件存储名称不能为空");
         checkNotNull(path,"上传文件输入流不能为空");
         boolean status = false;
@@ -191,10 +197,10 @@ public enum FtpUtilsEnum {
      * @param filepath  需要上传的文件路径
      * @return
      */
-    public boolean upload(String filename,String path,String filepath){
+    public boolean uploadFile(String filename,String path,String filepath){
         checkNotNull(filename,"上传文件存储名称不能为空");
         checkNotNull(filepath,"需要上传的文件路径不能为空");
-        return  upload(filename,path,new File(filepath));
+        return  uploadFile(filename,path,new File(filepath));
     }
 
     /**
@@ -204,12 +210,12 @@ public enum FtpUtilsEnum {
      * @param file 需要上传的文件
      * @return
      */
-    public boolean upload(String filename,String path,File file){
+    public boolean uploadFile(String filename,String path,File file){
         checkNotNull(filename,"上传文件存储名称不能为空");
         checkNotNull(file,"需要上传的文件不能为空");
         boolean status = false;
         try {
-            status=upload(filename, path, new FileInputStream(file));
+            status=uploadFile(filename, path, new FileInputStream(file));
         } catch (FileNotFoundException e) {
             log.error("需要上传的文件不存在",e);
             e.printStackTrace();
@@ -255,7 +261,7 @@ public enum FtpUtilsEnum {
             }
         }
         try {
-            status=upload(filename,path,new FileInputStream(imagePath));
+            status=uploadFile(filename,path,new FileInputStream(imagePath));
         } catch (FileNotFoundException e) {
             log.error("压缩图片不存在",e);
             e.printStackTrace();
@@ -275,14 +281,15 @@ public enum FtpUtilsEnum {
      * @Author qyw
      * @Description 从FTP服务器下载文件
      * @Date Created in 9:58 2018/8/14
-     * @Param [remotePath, fileName, localPath] fileName:要下载的文件名
+     * @param remotePath 远程路径
+     * @param fileName 要下载的文件名
+     * @param localPath 本地保存路径
      * @Return boolean
      **/
     public boolean downloadFile(String remotePath,String fileName,String localPath){
         boolean status=false;
         if (cd(remotePath)) {
             FTPFile[] ftpFiles;
-            ftpClient.enterLocalPassiveMode();
             try {
                 ftpFiles = ftpClient.listFiles();
             } catch (IOException e) {
@@ -296,7 +303,7 @@ public enum FtpUtilsEnum {
                 if (ftpFile.getName().equals(fileName)) {
                     OutputStream fos=null;
                     try {
-                        fos = new FileOutputStream(localPath+ File.pathSeparator+fileName);
+                        fos = new FileOutputStream(localPath+ File.separator+fileName);
                         ftpClient.setBufferSize(1024);
                         ftpClient.setControlEncoding(controlEncoding);
                         try {
