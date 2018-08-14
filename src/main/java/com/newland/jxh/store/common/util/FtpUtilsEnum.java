@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
 *{@link FTPClient,Thumbnails}
-* @Author Administrator
-* @Description TODO
+* @Author qyw
+* @Description ftp 工具:上传,下载,移动,删除,创建,上传并压缩图片
 * @Date Created in 19:49 2018/8/13
 * @Param 
 * @Return 
