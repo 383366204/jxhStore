@@ -1,6 +1,7 @@
 package com.newland.jxh.store.demo.web.controller;
 
 
+import com.newland.jxh.store.common.config.FtpProperties;
 import com.newland.jxh.store.common.exception.ApiException;
 import com.newland.jxh.store.common.exception.StoreException;
 import com.newland.jxh.store.common.exception.UserNameExistException;
@@ -12,11 +13,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
@@ -32,10 +33,14 @@ import javax.validation.Valid;
 @Api(description = "演示使用的employeeController")
 @Controller
 @RequestMapping("/demo/employee")
+@EnableConfigurationProperties(value = FtpProperties.class)
 public class EmployeeController {
 
     @Autowired
     private IEmployeeService employeeService;
+
+    @Autowired
+    private FtpProperties ftpProperties;
 
     @GetMapping
     public String index(){
@@ -58,6 +63,11 @@ public class EmployeeController {
         return serverResponse;
     }
 
+    @GetMapping("/pro")
+    @ResponseBody
+    public String ftpProperties(){
+        return ftpProperties.toString();
+    }
 
 }
 

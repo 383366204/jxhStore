@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: yourUrl
-    username: yourUser
-    password: yourPwd
+    url: jdbc:mysql://gz-cdb-gm9ozszn.sql.tencentcdb.com:62183/jxhstore?serverTimezone=Asia/Shanghai&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: jxhstore168
     driver-class-name: com.mysql.jdbc.Driver
 #mybatis
 mybatis-plus:
@@ -34,3 +34,13 @@ mybatis-plus:
 ##logging
 #logging:
 #  level: warn
+
+#ftp
+ftp:
+  server: 192.168.23.128
+  port: 21
+  username:
+  password: 123456
+  controlEncoding: UTF-8
+  ImgCacheDir: D:/img
+
