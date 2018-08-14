@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.DigestUtils;
 
 /**
+ * {@link DigestUtils}
  * @Author qyw
  * @Description MD5加密工具
  * @Date Created in 23:07 2018/8/12
@@ -48,8 +49,8 @@ public enum Md5UtilEnum {
         return false;
     }
 
-    public static void main(String[] args){
+/*    public static void main(String[] args){
         String encodeStr = Md5UtilEnum.md5("qyw", "salt");
         System.out.println(Md5UtilEnum.verify("qyw", "salt","9fd10b2e96673285d08ba5f230fa16a8"));
-    }
+    }*/
 }

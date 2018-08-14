@@ -55,5 +55,12 @@ public class FtpUtilTest {
             System.out.println(upload==true?"上传图片成功":"上传图片失败");
         }
     }
-
+    @Test
+    public void testDownload() throws Exception {
+        Path path = Paths.get("D:\\jxhStore\\src\\main\\resources");
+        if(instance.open()){
+            boolean upload = instance.downloadFile("root/dmweb/rwdwebapp3.0", "download_file.jsp", path.toString());
+            System.out.println(upload==true?"下载文件成功":"下载文件失败");
+        }
+    }
 }
