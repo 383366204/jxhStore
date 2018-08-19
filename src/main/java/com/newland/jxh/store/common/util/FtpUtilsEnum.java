@@ -45,7 +45,7 @@ public enum FtpUtilsEnum {
            initConfig();
        }
 
-    public static void initConfig(){
+    private static void initConfig(){
         try {
             Properties properties = PropertiesLoaderUtils.loadAllProperties("jxhStore.properties");
             server=properties.getProperty("ftp.server").trim();

@@ -14,11 +14,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -42,6 +41,11 @@ public class EmployeeController {
     @Autowired
     private FtpProperties ftpProperties;
 
+
+    @Autowired
+    RedisTemplate<Object,Employee> employeeRedisTemplate;
+
+
     @GetMapping
     public String index(){
         return "index";
@@ -62,6 +66,23 @@ public class EmployeeController {
         }
         return serverResponse;
     }
+
+    @GetMapping("/get/{id}")
+    @ResponseBody
+    @Cacheable(cacheNames = "my-redis-cache1",cacheManager = "customCacheManger")
+    public Employee getEmpById(@PathVariable Long id){
+        Employee employee = employeeService.selectById(id);
+        return employee;
+    }
+
+/*    @GetMapping("/get2/{id}")
+    @ResponseBody
+    public Employee getEmpById2(@PathVariable Long id){
+
+        employeeRedisTemplate.opsForValue().get("");
+
+        return employeeService.selectById(id);
+    }*/
 
     @GetMapping("/pro")
     @ResponseBody

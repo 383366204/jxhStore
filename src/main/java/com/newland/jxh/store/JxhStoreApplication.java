@@ -1,8 +1,8 @@
 package com.newland.jxh.store;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -11,7 +11,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 })*/
 @EnableTransactionManagement
-@EnableSwagger2
+@EnableSwagger2 // 开启Swagger2注解
+@EnableCaching // 开启注解缓存
 public class JxhStoreApplication {
 
 	public static void main(String[] args) {
