@@ -33,7 +33,7 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<Object, Employee> empRedisTemplate(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {
-        RedisTemplate<Object, Employee> template = new RedisTemplate();
+        RedisTemplate<Object, Employee> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         Jackson2JsonRedisSerializer<Employee> employeeJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Employee.class);
         template.setDefaultSerializer(employeeJackson2JsonRedisSerializer);
