@@ -6,6 +6,10 @@ spring:
     username: root
     password: jxhstore168
     driver-class-name: com.mysql.jdbc.Driver
+  session:
+    redis:
+      flush-mode: on_save
+      namespace: jxhStore:session
 #mybatis
 mybatis-plus:
   mapper-locations: classpath:/mappers/*Mapper.xml
@@ -46,5 +50,7 @@ ftp:
   controlEncoding: UTF-8
   ImgCacheDir: D:/img
 
-
-
+server:
+  servlet:
+    session:
+      timeout: 1800s
