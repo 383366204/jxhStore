@@ -1,3 +1,4 @@
+/*
 package com.newland.jxh.store.demo.config;
 
 import org.springframework.context.annotation.Bean;
@@ -8,16 +9,20 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
+*/
 /**
  * @Author qyw
  * @Description TODO
  * @Date Created in 14:34 2018/8/19
- */
+ *//*
+
 @Configuration
 @EnableWebSocketMessageBroker
+*/
 /*
 https://spring.io/guides/gs/messaging-stomp-websocket/
-*/
+*//*
+
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Bean
@@ -36,3 +41,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/gs-guide-websocket").withSockJS();
     }
 }
+*/

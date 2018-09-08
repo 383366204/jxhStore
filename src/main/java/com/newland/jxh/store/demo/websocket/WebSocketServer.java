@@ -1,3 +1,4 @@
+/*
 package com.newland.jxh.store.demo.websocket;
 
 import lombok.extern.slf4j.Slf4j;
@@ -10,11 +11,13 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+*/
 /**
  * @Author qyw
  * @Description websocket 简易聊天室
  * @Date Created in 14:35 2018/8/19
- */
+ *//*
+
 @ServerEndpoint("/chat-room/{username}")
 @Component
 @Slf4j
@@ -95,3 +98,4 @@ public class WebSocketServer {
         WebSocketServer.onlineCount--;
     }
 }
+*/
