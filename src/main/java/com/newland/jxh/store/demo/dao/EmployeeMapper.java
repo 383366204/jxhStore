@@ -1,7 +1,7 @@
 package com.newland.jxh.store.demo.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.newland.jxh.store.demo.model.Employee;
-import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
  * <p>
