@@ -29,7 +29,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
-    <mybatis-plus-boot-starter.version>2.3</mybatis-plus-boot-starter.version>
+    <mybatis-plus-boot-starter.version>3.0.1</mybatis-plus-boot-starter.version>
     <hikaricp.version>3.2.0</hikaricp.version>
     <velocity.version>2.0</velocity.version>
     <guava.version>25.1-jre</guava.version>
