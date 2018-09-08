@@ -38,10 +38,8 @@ public class Employee extends Model<Employee> {
     private String gender;
     @Range(min = 0,max = 300,message = "年龄不正确")
     private Integer age;
-
     @Override
     protected Serializable pkVal() {
         return this.id;
     }
-
 }
