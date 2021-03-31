@@ -32,7 +32,7 @@
     <mybatis-plus-boot-starter.version>2.3</mybatis-plus-boot-starter.version>
     <HikariCP.version>3.2.0</HikariCP.version>
     <velocity.version>2.0</velocity.version>
-    <guava.version>25.1-jre</guava.version>
+    <guava.version>29.0-jre</guava.version>
     <commons-lang3>3.7</commons-lang3>
     <commons-beanutils.version>1.9.3</commons-beanutils.version>
     <lombok.version>1.18.2</lombok.version>
